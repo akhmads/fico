@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Items;
 
 use UnitEnum;
-use BackedEnum;
 use App\Models\Item;
 use App\Enums\Trading;
 use App\Enums\Transport;
@@ -28,8 +27,6 @@ use App\Filament\Resources\Items\Pages\ManageItems;
 class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocument;
 
     protected static string|UnitEnum|null $navigationGroup = 'Master';
 
@@ -69,22 +66,30 @@ class ItemResource extends Resource
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('code')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('transport')
                     ->size(TextSize::Large)
-                    ->badge(),
+                    ->badge()
+                    ->toggleable(),
                 TextColumn::make('type')
                     ->size(TextSize::Large)
                     ->badge()
                     ->toggleable(),
                 IconColumn::make('is_active')
+                    ->sortable()
                     ->boolean(),
             ])
             ->filters([
                 SelectFilter::make('transport')
+                    ->placeholder('Select')
                     ->options(Transport::class),
+                SelectFilter::make('type')
+                    ->placeholder('Select')
+                    ->options(Trading::class),
             ])
             ->recordActions([
                 EditAction::make(),

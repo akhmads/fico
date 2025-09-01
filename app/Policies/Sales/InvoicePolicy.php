@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Sales;
 
 use App\Models\User;
 use App\Models\Sales\Invoice;
 
-class SalesInvoicePolicy
+class InvoicePolicy
 {
     public function __construct()
     {

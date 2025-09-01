@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(UserSeeder::class);
+        $this->call(PpnSeeder::class);
+        $this->call(PphSeeder::class);
+        $this->call(CurrencySeeder::class);
+        $this->call(UomSeeder::class);
+        $this->call(CoaSeeder::class);
+        $this->call(ItemSeeder::class);
     }
 }

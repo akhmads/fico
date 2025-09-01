@@ -1,63 +1,58 @@
 <?php
 
-namespace App\Filament\Resources\Contacts;
+namespace App\Filament\Resources\Coas;
 
 use UnitEnum;
-use BackedEnum;
-use App\Models\Contact;
+use App\Enums\DC;
+use App\Models\Coa;
+use App\Enums\ReportType;
 use Filament\Tables\Table;
 use Filament\Schemas\Schema;
 use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\Width;
 use Filament\Actions\DeleteAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Actions\BulkActionGroup;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\MarkdownEditor;
-use App\Filament\Resources\Contacts\Pages\ManageContacts;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use App\Filament\Resources\Coas\Pages\ManageCoas;
 
-class ContactResource extends Resource
+class CoaResource extends Resource
 {
-    protected static ?string $model = Contact::class;
+    protected static ?string $model = Coa::class;
 
-    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocument;
+    protected static ?string $navigationLabel = 'Chart Of Account';
 
     protected static string|UnitEnum|null $navigationGroup = 'Master';
 
-    // protected static ?string $navigationParentItem = 'Items';
-
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $modelLabel = 'Chart Of Account';
+
+    protected static ?string $pluralModelLabel = 'Chart Of Account';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextInput::make('code')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                    ->required(),
                 TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                MarkdownEditor::make('address')
-                    ->columnSpanFull()
-                    ->minHeight('80px'),
-                TextInput::make('phone'),
-                TextInput::make('mobile'),
-                TextInput::make('email'),
-                TextInput::make('tax_id'),
-                TextInput::make('tax_name'),
-                TextInput::make('top'),
-                TextInput::make('credit_limit'),
-                MarkdownEditor::make('note')
-                    ->columnSpanFull()
-                    ->minHeight('80px'),
-                Toggle::make('is_active'),
+                    ->required(),
+                Select::make('normal_balance')
+                    ->options(DC::class)
+                    ->required(),
+                Select::make('report_type')
+                    ->options(ReportType::class)
+                    ->required(),
+                Toggle::make('is_active')
+                    ->required(),
             ]);
     }
 
@@ -65,9 +60,6 @@ class ContactResource extends Resource
     {
         return $table
             ->recordTitleAttribute('name')
-            ->persistFiltersInSession()
-            ->persistSearchInSession()
-            ->persistColumnSearchesInSession()
             ->columns([
                 TextColumn::make('code')
                     ->sortable()
@@ -75,38 +67,44 @@ class ContactResource extends Resource
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('phone'),
-                TextColumn::make('email'),
+                TextColumn::make('normal_balance')
+                    ->badge(),
+                TextColumn::make('report_type')
+                    ->badge(),
                 IconColumn::make('is_active')
-                    ->sortable()
                     ->boolean(),
                 TextColumn::make('created_at')
-                    ->date()
+                    ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->date()
+                    ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('normal_balance')
+                    ->options(DC::class),
+                SelectFilter::make('report_type')
+                    ->options(ReportType::class),
+                TernaryFilter::make('is_active')
+                    ->nullable(),
             ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                // ]),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ManageContacts::route('/'),
+            'index' => ManageCoas::route('/'),
         ];
     }
 }

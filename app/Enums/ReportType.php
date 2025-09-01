@@ -5,11 +5,10 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum Trading: string implements HasLabel, HasColor
+enum ReportType: string implements HasLabel, HasColor
 {
-    case All = 'all';
-    case Export = 'export';
-    case Import = 'import';
+    case BalanceSheet = 'BS';
+    case ProfitLoss = 'PL';
 
     public function getLabel(): ?string
     {
@@ -19,9 +18,8 @@ enum Trading: string implements HasLabel, HasColor
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::All => 'success',
-            self::Export => 'primary',
-            self::Import => 'info',
+            self::BalanceSheet => 'info',
+            self::ProfitLoss => 'warning',
         };
     }
 }
