@@ -7,6 +7,7 @@ use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
+use Filament\Navigation\NavigationItem;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
@@ -27,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             // ->spa()
             ->brandName('Finance')
             ->databaseTransactions()
-            // ->databaseNotifications()
+            ->databaseNotifications()
             // ->unsavedChangesAlerts()
             ->maxContentWidth(\Filament\Support\Enums\Width::Full)
             ->favicon(asset('favicon.ico'))
