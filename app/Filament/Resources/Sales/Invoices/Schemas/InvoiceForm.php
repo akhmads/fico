@@ -39,6 +39,7 @@ class InvoiceForm
                             ->required(),
                         TextInput::make('status')
                             ->disabled(fn (string $operation): bool => $operation == 'create' || $operation == 'edit')
+                            ->default('open')
                             ->required(),
                     ]),
 

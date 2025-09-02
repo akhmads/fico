@@ -65,6 +65,7 @@ class ContactResource extends Resource
     {
         return $table
             ->recordTitleAttribute('name')
+            ->defaultSort('name','asc')
             ->persistFiltersInSession()
             ->persistSearchInSession()
             ->persistColumnSearchesInSession()

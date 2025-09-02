@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('favicon.ico'))
             ->navigationGroups([
                 'Sales',
+                'General Ledger',
                 'Master',
             ])
             //->topNavigation()

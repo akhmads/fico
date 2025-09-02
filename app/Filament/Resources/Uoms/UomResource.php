@@ -1,55 +1,46 @@
 <?php
 
-namespace App\Filament\Resources\Coas;
+namespace App\Filament\Resources\Uoms;
 
+use App\Filament\Resources\Uoms\Pages\ManageUoms;
+use App\Models\Uom;
 use UnitEnum;
-use App\Enums\DC;
-use App\Models\Coa;
-use App\Enums\ReportType;
-use Filament\Tables\Table;
-use Filament\Schemas\Schema;
-use Filament\Actions\EditAction;
-use Filament\Resources\Resource;
-use Filament\Actions\DeleteAction;
-use Filament\Support\Icons\Heroicon;
 use Filament\Actions\BulkActionGroup;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
-use App\Filament\Resources\Coas\Pages\ManageCoas;
+use Filament\Tables\Table;
 
-class CoaResource extends Resource
+class UomResource extends Resource
 {
-    protected static ?string $model = Coa::class;
+    protected static ?string $model = Uom::class;
 
-    protected static ?string $navigationLabel = 'Chart Of Account';
+    protected static ?string $navigationLabel = 'Unit of Measurements';
 
     protected static string|UnitEnum|null $navigationGroup = 'Master';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $modelLabel = 'Chart Of Account';
+    protected static ?string $modelLabel = 'Unit of Measurement';
 
-    protected static ?string $pluralModelLabel = 'Chart Of Account';
+    protected static ?string $pluralModelLabel = 'Unit of Measurements';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextInput::make('code')
+                    ->required()
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 TextInput::make('name')
-                    ->required(),
-                Select::make('normal_balance')
-                    ->options(DC::class)
-                    ->required(),
-                Select::make('report_type')
-                    ->options(ReportType::class)
                     ->required(),
                 Toggle::make('is_active')
                     ->required(),
@@ -60,7 +51,6 @@ class CoaResource extends Resource
     {
         return $table
             ->recordTitleAttribute('name')
-            ->defaultSort('code','asc')
             ->columns([
                 TextColumn::make('code')
                     ->sortable()
@@ -68,10 +58,6 @@ class CoaResource extends Resource
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('normal_balance')
-                    ->badge(),
-                TextColumn::make('report_type')
-                    ->badge(),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')
@@ -84,12 +70,7 @@ class CoaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('normal_balance')
-                    ->options(DC::class),
-                SelectFilter::make('report_type')
-                    ->options(ReportType::class),
-                TernaryFilter::make('is_active')
-                    ->nullable(),
+                //
             ])
             ->recordActions([
                 EditAction::make(),
@@ -105,7 +86,7 @@ class CoaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCoas::route('/'),
+            'index' => ManageUoms::route('/'),
         ];
     }
 }
