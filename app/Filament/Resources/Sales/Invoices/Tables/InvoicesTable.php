@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Sales\Invoices\Tables;
 
+use App\Enums\Approval;
 use Filament\Tables\Table;
-use App\Enums\InvoiceStatus;
 use Filament\Actions\Action;
 use App\Models\Sales\Invoice;
 use Illuminate\Support\Carbon;
@@ -28,6 +28,10 @@ class InvoicesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->persistFiltersInSession()
+            ->filtersFormWidth(Width::ExtraLarge)
+            ->filtersFormMaxHeight('400px')
+            ->filtersFormColumns(2)
             ->columns([
                 TextColumn::make('status')
                     ->badge(),
@@ -39,10 +43,6 @@ class InvoicesTable
                 TextColumn::make('amount')
                     ->money('IDR', decimalPlaces: 2),
             ])
-            ->persistFiltersInSession()
-            ->filtersFormWidth(Width::ExtraLarge)
-            ->filtersFormMaxHeight('400px')
-            ->filtersFormColumns(2)
             ->filters([
                 Filter::make('created_at')
                     ->columnSpanFull()
@@ -63,7 +63,7 @@ class InvoicesTable
                             );
                     }),
                 SelectFilter::make('status')
-                    ->options(InvoiceStatus::class),
+                    ->options(Approval::class),
             ])
             ->recordActions([
                 ActionGroup::make([

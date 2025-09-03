@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Journals\Schemas;
 
-use App\Enums\DC;
+use App\Enums\Side;
 use App\Helpers\Cast;
 use App\Enums\JournalType;
 use Filament\Actions\Action;
@@ -13,6 +13,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Schemas\Components\Utilities\Get;
@@ -41,7 +42,7 @@ class JournalForm
                             ->required(),
                         Select::make('contact_id')
                             ->required()
-                            ->relationship('contact','name')
+                            ->relationship('contact', 'name', fn (Builder $query) => $query->where('is_active','1'))
                             ->searchable()
                             ->preload()
                             ->optionsLimit(20),
@@ -115,7 +116,7 @@ class JournalForm
                             ->table([
                                 TableColumn::make('Account'),
                                 TableColumn::make('D/C')
-                                    ->width(150),
+                                    ->width('112px'),
                                 TableColumn::make('Amount')
                                     ->width(200),
                                 TableColumn::make('Description'),
@@ -130,7 +131,7 @@ class JournalForm
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
                                 ToggleButtons::make('dc')
                                     ->grouped()
-                                    ->options(DC::class)
+                                    ->options(Side::class)
                                     ->default('D')
                                     ->live()
                                     ->afterStateUpdated(function ($state, Get $get, Set $set) {
@@ -176,12 +177,6 @@ class JournalForm
 
     public static function updateTotal(Get $get, Set $set): void
     {
-        // $selectedItems = collect($get('details'))->filter(fn($item) => !empty($item['debit']) && !empty($item['credit']));
-        // $subtotal = $selectedItems->reduce(function ($subtotal, $item) {
-        //     $mul = bcmul(Cast::number($item['price']), Cast::number($item['qty']), 2);
-        //     return bcadd($subtotal, $mul, 2);
-        // }, 0);
-
         $selectedItems = collect($get('details'));
 
         $debit_total = $selectedItems->reduce(function ($debit_total, $item) {
@@ -194,8 +189,5 @@ class JournalForm
 
         $set('debit_total', Cast::money($debit_total));
         $set('credit_total', Cast::money($credit_total));
-
-        // $set('debit_total', Cast::money($selectedItems->sum('debit')));
-        // $set('credit_total', Cast::money($selectedItems->sum('credit')));
     }
 }

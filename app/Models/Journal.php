@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Approval;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Journal extends Model
 {
     protected function casts(): array
     {
         return [
+            'status' => Approval::class,
             'debit_total' => 'decimal:2',
             'credit_total' => 'decimal:2',
         ];
@@ -33,7 +35,7 @@ class Journal extends Model
 
             if ($model->isDirty('status')) {
                 $model->details()->update([
-                    'status' => $model->status
+                    'status' => $model->status->value
                 ]);
             }
         });
