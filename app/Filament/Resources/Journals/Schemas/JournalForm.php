@@ -33,8 +33,8 @@ class JournalForm
                     ->schema([
 
                         TextInput::make('code')
-                            ->required()
-                            ->maxLength(255)
+                            ->disabled()
+                            ->placeholder('[auto]')
                             ->unique(ignoreRecord: true),
                         DatePicker::make('date')
                             ->default(now())

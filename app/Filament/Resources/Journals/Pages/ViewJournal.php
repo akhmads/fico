@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Journals\Pages;
 
-use App\Filament\Resources\Journals\JournalResource;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
+use App\Filament\Resources\Journals\JournalResource;
 
 class ViewJournal extends ViewRecord
 {
@@ -13,7 +14,14 @@ class ViewJournal extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            Action::make('back')
+                ->label('Back')
+                ->color('gray')
+                ->icon('heroicon-c-arrow-uturn-left')
+                ->url($this->getResource()::getUrl('index')),
+
+            EditAction::make()
+                ->icon('heroicon-c-pencil-square'),
         ];
     }
 }

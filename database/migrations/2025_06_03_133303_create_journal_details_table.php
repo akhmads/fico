@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('journal_details', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->index();
+            // $table->string('code')->index();
+            $table->foreignId('journal_id')
+                ->index()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('coa_code')->index();
             $table->string('type')->index()->nullable();
             $table->string('description')->nullable();

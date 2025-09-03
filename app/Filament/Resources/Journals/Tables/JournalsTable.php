@@ -29,9 +29,9 @@ class JournalsTable
                     ->date()
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('debit_amount')
+                TextColumn::make('debit_total')
                     ->money('IDR', decimalPlaces: 2),
-                TextColumn::make('credit_amount')
+                TextColumn::make('credit_total')
                     ->money('IDR', decimalPlaces: 2),
                 TextColumn::make('created_at')
                     ->dateTime()

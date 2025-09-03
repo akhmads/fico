@@ -46,7 +46,7 @@ class Journal extends Model
 
     public function details(): HasMany
     {
-        return $this->hasMany(JournalDetail::class,'code','code');
+        return $this->hasMany(JournalDetail::class,'journal_id','id');
     }
 
     public function createdBy(): BelongsTo

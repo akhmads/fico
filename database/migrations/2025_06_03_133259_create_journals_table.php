@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('contact_id')->index()->nullable()->default(0);
             $table->string('journalable_type')->index()->nullable();
             $table->string('journalable_id')->index()->nullable();
+            $table->string('journalable_code')->nullable();
             $table->enum('status', ['open','approved','void'])->index()->default('open');
             $table->foreignId('created_by')->index()->default(0);
             $table->foreignId('updated_by')->index()->default(0);
