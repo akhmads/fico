@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('name');
+            $table->string('full_name')->storedAs("CONCAT(code, ', ', name)");
             $table->boolean('is_active')->index();
             $table->timestamps();
         });

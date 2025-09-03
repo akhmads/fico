@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Journals\Tables;
+namespace App\Filament\Resources\CashIns\Tables;
 
 use App\Enums\Approval;
 use Filament\Tables\Table;
@@ -18,7 +18,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Enums\RecordActionsPosition;
 
-class JournalsTable
+class CashInsTable
 {
     public static function configure(Table $table): Table
     {
@@ -37,17 +37,14 @@ class JournalsTable
                 TextColumn::make('date')
                     ->date()
                     ->sortable(),
-                TextColumn::make('contact.name'),
-                TextColumn::make('debit_total')
-                    ->money('IDR', decimalPlaces: 2),
-                TextColumn::make('credit_total')
-                    ->money('IDR', decimalPlaces: 2),
-                TextColumn::make('journalable_type')
-                    ->label('Ref Type')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('journalable_code')
-                    ->label('Ref Code')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('cashAccount.name')
+                    ->searchable(),
+                TextColumn::make('contact.name')
+                    ->searchable(),
+                TextColumn::make('total_amount')
+                    ->numeric(decimalPlaces: 0)
+                    ->sortable(),
+                TextColumn::make('type'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
