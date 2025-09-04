@@ -25,7 +25,8 @@ class CashInForm
                             ->disabled()
                             ->placeholder('[auto]')
                             ->unique(ignoreRecord: true),
-                        DatePicker::make('date'),
+                        DatePicker::make('date')
+                            ->default(now()),
                         Select::make('cash_account_id')
                             ->required()
                             ->relationship('cashAccount', 'name', fn (Builder $query) => $query->where('is_active','1'))
