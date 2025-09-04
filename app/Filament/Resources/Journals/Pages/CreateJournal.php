@@ -12,7 +12,6 @@ class CreateJournal extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['code'] = Code::auto('JV');
         return $data;
     }
 

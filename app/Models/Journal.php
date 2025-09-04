@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Code;
 use App\Enums\Approval;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,7 @@ class Journal extends Model
     protected static function booted(): void
     {
         static::creating(function (Model $model) {
+            $model->code = Code::auto(settings('journal_code'), $model->date);
             $model->created_by = auth()->user()->id;
             $model->updated_by = auth()->user()->id;
         });

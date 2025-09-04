@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use UnitEnum;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Schemas\Schema;
@@ -15,7 +16,9 @@ use Filament\Schemas\Components\Tabs\Tab;
 
 class Settings extends Page
 {
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Settings';
 
     protected string $view = 'filament.pages.settings';
 
@@ -29,10 +32,12 @@ class Settings extends Page
     public function mount(): void
     {
         $this->form->fill([
+            'journal_code' => settings('journal_code'),
             'cash_in_code' => settings('cash_in_code'),
             'cash_out_code' => settings('cash_out_code'),
             'bank_in_code' => settings('bank_in_code'),
             'bank_out_code' => settings('bank_out_code'),
+            'intercash_code' => settings('intercash_code'),
         ]);
     }
 
@@ -48,7 +53,7 @@ class Settings extends Page
                             ->schema([
 
                                 Fieldset::make('Cash And Bank')
-                                    ->columns(['xl' => 4])
+                                    ->columns(['xl' => 5])
                                     ->schema([
                                         TextInput::make('cash_in_code')
                                             ->label('Cash In')
@@ -66,6 +71,19 @@ class Settings extends Page
                                             ->label('Bank Out')
                                             ->required()
                                             ->maxLength(20),
+                                        TextInput::make('intercash_code')
+                                            ->label('Intercash')
+                                            ->required()
+                                            ->maxLength(20),
+                                    ]),
+
+                                Fieldset::make('General Ledger')
+                                    ->columns(['xl' => 5])
+                                    ->schema([
+                                        TextInput::make('journal_code')
+                                            ->label('Journal')
+                                            ->required()
+                                            ->maxLength(20),
                                     ]),
 
                             ]),
@@ -74,28 +92,6 @@ class Settings extends Page
                                 // ...
                             ]),
                     ]),
-
-                // Section::make('Code')
-                //     ->columns(['xl' => 4])
-                //     ->schema([
-
-                //         TextInput::make('cash_in_code')
-                //             ->label('Cash In')
-                //             ->required()
-                //             ->maxLength(20),
-                //         TextInput::make('cash_out_code')
-                //             ->label('Cash Out')
-                //             ->required()
-                //             ->maxLength(20),
-                //         TextInput::make('bank_in_code')
-                //             ->label('Bank In')
-                //             ->required()
-                //             ->maxLength(20),
-                //         TextInput::make('bank_out_code')
-                //             ->label('Bank Out')
-                //             ->required()
-                //             ->maxLength(20),
-                //     ]),
             ])
             // ->record($this->getRecord())
             ->statePath('data');

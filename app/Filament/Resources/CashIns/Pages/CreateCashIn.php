@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\CashIns\Pages;
 
-use App\Filament\Resources\CashIns\CashInResource;
+use App\Helpers\Code;
+use App\Models\CashAccount;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\CashIns\CashInResource;
 
 class CreateCashIn extends CreateRecord
 {
@@ -12,9 +14,7 @@ class CreateCashIn extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $cashAccount = CashAccount::find($data['cash_account_id']);
-        // $prefix = settings('cash_in_code') . $cashAccount->code;
-
-        $prefix = 'BKM-' . $cashAccount->code;
+        $prefix = settings('cash_in_code') . $cashAccount->code;
         $data['code'] = Code::auto($prefix, $data['date']);
         return $data;
     }

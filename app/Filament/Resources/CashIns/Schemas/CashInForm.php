@@ -29,6 +29,7 @@ class CashInForm
                             ->default(now()),
                         Select::make('cash_account_id')
                             ->required()
+                            ->disabled(fn (string $operation): bool => $operation === 'edit')
                             ->relationship('cashAccount', 'name', fn (Builder $query) => $query->where('is_active','1'))
                             ->searchable()
                             ->preload()

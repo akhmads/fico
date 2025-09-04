@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
                 'Cash And Bank',
                 'General Ledger',
                 'Master',
+                'Settings',
             ])
             //->topNavigation()
             // ->sidebarWidth('18rem')
